@@ -1,0 +1,120 @@
+<div class="dialog-overlay" (click)="close()" tabindex="0" (keydown.escape)="close()" role="dialog" aria-modal="true"
+    [attr.aria-label]="'Edit ' + list().name">
+    <div class="dialog-card" (click)="$event.stopPropagation()" tabindex="0" (keydown)="$event.stopPropagation()">
+        <div class="dialog-header">
+            <div class="header-info">
+                <h2>{{ list().name }}</h2>
+                @if (list().description) {
+                <p class="header-description">{{ list().description }}</p>
+                }
+            </div>
+            <div class="header-actions">
+                <button class="btn-delete-list" (click)="confirmDeleteList()" aria-label="Delete list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                    </svg>
+                </button>
+                <button class="btn-close" (click)="close()" aria-label="Close dialog">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="dialog-content">
+            <!-- Books in list -->
+            <section class="section">
+                <div class="section-header">
+                    <h3>Books ({{ booksInList().length }})</h3>
+                    <button class="btn-text" (click)="toggleBookPicker()">
+                        {{ showBookPickerR() ? 'Done' : '+ Add' }}
+                    </button>
+                </div>
+
+                @if (booksInList().length > 0) {
+                <div class="books-list">
+                    @for (book of booksInList(); track book.id) {
+                    <app-book-card [book]="book" [showRemoveButton]="true" (removeClick)="confirmRemoveBook(book)" />
+                    }
+                </div>
+                } @else {
+                <p class="empty-hint">No books in this list yet.</p>
+                }
+            </section>
+
+            <!-- Add books picker -->
+            @if (showBookPickerR()) {
+            <section class="section picker-section">
+                <h3>Available Books</h3>
+                @if (availableBooks().length > 0) {
+                <div class="picker-list">
+                    @for (book of availableBooks(); track book.id) {
+                    <div class="picker-item" (click)="addBookToList(book.id)" tabindex="0"
+                        (keydown.enter)="addBookToList(book.id)">
+                        <div class="picker-info">
+                            <span class="picker-name">{{ book.title }}</span>
+                            <span class="picker-author">{{ book.author }} · {{ book.year }}</span>
+                        </div>
+                        <svg class="picker-add-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                    </div>
+                    }
+                </div>
+                } @else {
+                <p class="empty-hint">All books are in this list!</p>
+                }
+
+                <button class="btn-add-new" (click)="toggleAddBookForm()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span>Create New Book</span>
+                </button>
+
+                @if (showAddBookFormR()) {
+                <div class="new-book-form">
+                    <div class="form-group">
+                        <label for="newTitle" class="form-label">Title</label>
+                        <input id="newTitle" [value]="newBookTitleR()" (input)="onNewBookTitleInput($event)" type="text"
+                            class="form-input" placeholder="Book title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newAuthor" class="form-label">Author</label>
+                        <input id="newAuthor" [value]="newBookAuthorR()" (input)="onNewBookAuthorInput($event)"
+                            type="text" class="form-input" placeholder="Author name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newYear" class="form-label">Year</label>
+                        <input id="newYear" [value]="newBookYearR()" (input)="onNewBookYearInput($event)" type="number"
+                            class="form-input" placeholder="Year" />
+                    </div>
+                    <button class="btn-primary btn-sm" (click)="addNewBookAndLink()" [disabled]="!isNewBookValid()">Add
+                        to List</button>
+                </div>
+                }
+            </section>
+            }
+        </div>
+    </div>
+</div>
+
+@if (showDeleteBookDialogR()) {
+<app-confirm-dialog title="Remove Book" [message]="'Remove \'' + (bookToRemoveR()?.title ?? '') + '\' from this list?'"
+    confirmLabel="Remove" (confirmed)="removeBook()" (cancelled)="cancelRemoveBook()" />
+}
+
+@if (showDeleteListDialogR()) {
+<app-confirm-dialog title="Delete List"
+    [message]="'Delete \'' + list().name + '\'? Books not in other lists will be deleted.'" confirmLabel="Delete"
+    (confirmed)="deleteList()" (cancelled)="cancelDeleteList()" />
+}

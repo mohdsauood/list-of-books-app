@@ -1,0 +1,11 @@
+.app-shell {
+  max-width: 80%;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+}
+
+.app-content {
+  min-height: 100vh;
+}

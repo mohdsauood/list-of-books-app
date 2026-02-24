@@ -1,0 +1,22 @@
+<div class="book-card">
+    <div class="book-actions">
+        @if (showRemoveButton()) {
+        <button class="btn-remove-book" (click)="onRemoveClick()" aria-label="Remove book">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+        </button>
+        }
+    </div>
+    <div class="book-avatar" [style.background-color]="avatarColor()">
+        <span>{{ initial() }}</span>
+    </div>
+    <div class="book-info">
+        <h3 class="book-title">{{ book().title }}</h3>
+        <p class="book-author">by {{ book().author }}</p>
+        <p class="book-year">{{ book().year }}</p>
+    </div>
+
+</div>

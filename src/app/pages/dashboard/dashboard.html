@@ -1,0 +1,85 @@
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>My Books</h1>
+    </div>
+
+    @if (error()) {
+    <div class="error-banner" role="alert">⚠️ {{ error() }}</div>
+    }
+
+    @if (loading()) {
+    <div class="loading-state" aria-label="Loading">
+        <div class="spinner" aria-hidden="true"></div>
+        <span>Loading...</span>
+    </div>
+    } @else {
+
+    <div class="dashboard-grid">
+        <!-- Left Column: Books -->
+        <section class="column books-column">
+            <header class="column-header">
+                <h2>All Books</h2>
+                <span class="count">{{ books().length }}</span>
+            </header>
+            <div class="books-list">
+                @for (book of books(); track book.id) {
+                <app-book-card [book]="book" />
+                } @empty {
+                <div class="empty-state">
+                    <p>No books yet</p>
+                </div>
+                }
+            </div>
+        </section>
+
+        <!-- Right Column: Lists -->
+        <section class="column lists-column">
+            <header class="column-header">
+                <h2>My Lists</h2>
+                <button class="btn-create" (click)="openCreateDialog()" aria-label="Create new list">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span>Create</span>
+                </button>
+            </header>
+
+            <div class="lists-collection">
+                @for (list of bookLists(); track list.id) {
+                <div class="list-item" (click)="openListDialog(list)" tabindex="0" role="button"
+                    [attr.aria-label]="'View: ' + list.name" (keydown.enter)="openListDialog(list)">
+                    <div class="list-header">
+                        <h3 class="list-name">{{ list.name }}</h3>
+                    </div>
+                    @if (list.description) {
+                    <p class="list-description">{{ list.description }}</p>
+                    }
+                    <p class="list-count">{{ getBookCount(list.id) }} book{{ getBookCount(list.id) === 1 ? '' : 's'
+                        }}</p>
+                </div>
+                } @empty {
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+                    </svg>
+                    <p>No lists yet</p>
+                    <button class="btn-create-empty" (click)="openCreateDialog()">Create your first list</button>
+                </div>
+                }
+            </div>
+        </section>
+    </div>
+
+    <!-- Dialogs -->
+    @if (showCreateDialog()) {
+    <app-create-list-dialog [books]="books()" (closed)="closeCreateDialog()" (created)="closeCreateDialog()" />
+    }
+
+    @if (selectedList(); as list) {
+    <app-edit-list-dialog [list]="list" [books]="books()" (closed)="closeListDialog()" />
+    }
+    } <!-- end @else loading -->
+</div>

@@ -1,0 +1,116 @@
+<div class="dialog-overlay" (click)="closed.emit()" tabindex="0" (keydown.escape)="closed.emit()" role="dialog"
+    aria-modal="true" aria-label="Create List">
+    <div class="dialog-card" (click)="$event.stopPropagation()" tabindex="0" (keydown)="$event.stopPropagation()">
+        <div class="dialog-header">
+            <h2>Create List</h2>
+            <button class="btn-close" (click)="closed.emit()" aria-label="Close dialog">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="form-content">
+            <div class="form-group">
+                <label for="listName" class="form-label">List Name</label>
+                <input id="listName" [value]="listName()" (input)="onListNameInput($event)" type="text"
+                    class="form-input" placeholder="e.g., Favorite Sci-Fi Books" />
+            </div>
+
+            <div class="form-group">
+                <label for="listDesc" class="form-label">Description</label>
+                <textarea id="listDesc" [value]="listDescription()" (input)="onListDescriptionInput($event)"
+                    class="form-textarea" placeholder="What is this list about?" rows="2"></textarea>
+            </div>
+
+            <!-- Selected Books -->
+            <div class="form-group">
+                <div class="section-header">
+                    <span class="form-label">Books ({{ getSelectedBooks().length }})</span>
+                    <button type="button" class="btn-text" (click)="toggleBookPicker()">
+                        {{ showBookPicker() ? 'Done' : '+ Add' }}
+                    </button>
+                </div>
+
+                @if (getSelectedBooks().length > 0) {
+                <div class="selected-books">
+                    @for (book of getSelectedBooks(); track book.id) {
+                    <div class="book-chip">
+                        <span>{{ book.title }}</span>
+                        <button type="button" class="btn-remove" (click)="removeSelectedBook(book.id)">
+                            ✕
+                        </button>
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+
+            <!-- Book Picker -->
+            @if (showBookPicker()) {
+            <div class="book-picker">
+                <div class="picker-list">
+                    @for (book of books(); track book.id) {
+                    <div class="picker-item" [class.selected]="isBookSelected(book.id)" (click)="toggleBook(book.id)"
+                        tabindex="0" role="checkbox" [attr.aria-checked]="isBookSelected(book.id)"
+                        (keydown.enter)="toggleBook(book.id)" (keydown.space)="toggleBook(book.id)">
+                        <div class="picker-check" aria-hidden="true">
+                            @if (isBookSelected(book.id)) {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            }
+                        </div>
+                        <div class="picker-info">
+                            <span class="picker-name">{{ book.title }}</span>
+                            <span class="picker-author">{{ book.author }} ({{ book.year }})</span>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <button type="button" class="btn-add-new" (click)="toggleAddBookForm()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    <span>Create New Book</span>
+                </button>
+
+                @if (showAddBookForm()) {
+                <div class="new-book-form">
+                    <div class="form-group">
+                        <label for="newTitle" class="form-label">Title</label>
+                        <input id="newTitle" [value]="newBookTitle()" (input)="onNewBookTitleInput($event)" type="text"
+                            class="form-input" placeholder="Book title" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newAuthor" class="form-label">Author</label>
+                        <input id="newAuthor" [value]="newBookAuthor()" (input)="onNewBookAuthorInput($event)"
+                            type="text" class="form-input" placeholder="Author name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="newYear" class="form-label">Year</label>
+                        <input id="newYear" [value]="newBookYear()" (input)="onNewBookYearInput($event)" type="number"
+                            class="form-input" placeholder="Year" />
+                    </div>
+                    <button type="button" class="btn-primary btn-sm" (click)="addNewBook()"
+                        [disabled]="!isNewBookValid()">Add Book</button>
+                </div>
+                }
+            </div>
+            }
+
+            <div class="dialog-actions">
+                <button type="button" class="btn-secondary" (click)="closed.emit()">Cancel</button>
+                <button type="button" class="btn-primary" (click)="createList()" [disabled]="!isFormValid()">Create
+                    List</button>
+            </div>
+        </div>
+    </div>
+</div>

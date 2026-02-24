@@ -1,0 +1,229 @@
+.dashboard {
+  padding: 20px 16px;
+
+  .dashboard-header {
+    margin-bottom: 24px;
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--heading);
+      margin: 0;
+    }
+  }
+
+  .error-banner {
+    background: #fff5f5;
+    border: 1px solid #fc8181;
+    color: #c53030;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 300px;
+    color: var(--text-secondary);
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    gap: 40px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: 65% 35%;
+    }
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary);
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--heading);
+      margin: 0;
+    }
+
+    .count {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--bg);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .btn-create {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #3580d8;
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+.books-column {
+  .books-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+
+    @media (max-width: 1400px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 960px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+.lists-column {
+  .lists-collection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .list-item {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .list-header {
+      margin-bottom: 4px;
+
+      .list-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--heading);
+        margin: 0;
+        word-wrap: break-word;
+      }
+    }
+
+    .list-description {
+      font-size: 12px;
+      color: var(--secondary-text);
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+    }
+
+    .list-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 0;
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--card);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+    svg {
+      color: var(--primary);
+      opacity: 0.3;
+      margin-bottom: 16px;
+    }
+
+    p {
+      font-size: 14px;
+      color: var(--secondary-text);
+      margin: 0 0 12px 0;
+    }
+
+    .btn-create-empty {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #3580d8;
+      }
+    }
+  }
+}
+
+@media (max-width: 960px) {
+  .column-header {
+    .count {
+      display: none;
+    }
+  }
+}

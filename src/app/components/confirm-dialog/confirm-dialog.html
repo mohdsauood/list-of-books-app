@@ -1,0 +1,19 @@
+<div class="dialog-overlay" (click)="cancelled.emit()" (keydown.escape)="cancelled.emit()"
+    (keydown.enter)="$event.preventDefault()" role="dialog" aria-modal="true" [attr.aria-label]="title()" tabindex="0">
+    <div class="dialog-card" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" tabindex="0">
+        <div class="dialog-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                <line x1="10" y1="11" x2="10" y2="17" />
+                <line x1="14" y1="11" x2="14" y2="17" />
+            </svg>
+        </div>
+        <h2 class="dialog-title">{{ title() }}</h2>
+        <p class="dialog-message">{{ message() }}</p>
+        <div class="dialog-actions">
+            <button class="btn-cancel" (click)="cancelled.emit()">Cancel</button>
+            <button class="btn-confirm" (click)="confirmed.emit()">{{ confirmLabel() }}</button>
+        </div>
+    </div>
+</div>
